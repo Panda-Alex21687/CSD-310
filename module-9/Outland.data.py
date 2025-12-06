@@ -1,5 +1,19 @@
-
 import mysql.connector
+import requests
+
+# ----------------------------
+# FETCH FILE FROM GITHUB
+# ----------------------------
+url = "https://raw.githubusercontent.com/Panda-Alex21687/Green-Group/main/module-9/Outland.data.py"
+response = requests.get(url)
+
+print("\n--- GITHUB FETCH STATUS ---")
+if response.status_code == 200:
+    print("GitHub file downloaded successfully!\n")
+    content = response.text
+    print(content)
+else:
+    print("Error fetching GitHub file:", response.status_code)
 
 # ----------------------------
 # CONNECT TO DATABASE
@@ -7,8 +21,8 @@ import mysql.connector
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Gillmore21",     # <-- Replace with your MySQL password
-    database="outland"       # <-- Make sure the database exists
+    password="Gillmore21",     
+    database="outland"
 )
 
 cursor = db.cursor()
@@ -95,7 +109,7 @@ CREATE TABLE EQUIPMENT (
     equipment_id INT PRIMARY KEY,
     item_name VARCHAR(100),
     item_type VARCHAR(50),
-    condition VARCHAR(50),
+    item_condition VARCHAR(50),
     acquired_date DATE,
     quantity_on_hand INT,
     managed_by INT,
@@ -133,7 +147,7 @@ db.commit()
 print("Tables created successfully!")
 
 # ----------------------------
-# INSERT SAMPLE DATA (6 Each)
+# Data Insertion
 # ----------------------------
 
 # EMPLOYEE
