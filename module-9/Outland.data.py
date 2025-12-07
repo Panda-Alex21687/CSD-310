@@ -4,7 +4,7 @@ import requests
 # ----------------------------
 # FETCH FILE FROM GITHUB
 # ----------------------------
-url = "https://raw.githubusercontent.com/Panda-Alex21687/Green-Group/main/module-9/Outland.data.py"
+url = "https://raw.githubusercontent.com/Panda-Alex21687/Green-Group/main/Outland.data.py"
 response = requests.get(url)
 
 print("\n--- GITHUB FETCH STATUS ---")
@@ -273,4 +273,4 @@ for table in tables:
     for row in cursor.fetchall():
         print(row)
 
-print("\nAll data displayed. Take your screenshots now!")
+print("\nAll data displayed!")
