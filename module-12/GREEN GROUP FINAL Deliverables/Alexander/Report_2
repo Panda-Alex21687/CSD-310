@@ -1,0 +1,78 @@
+# Report_2.py
+# Author: Alexander Baldree
+# Description: Report 2 – Booking Trends by Region
+
+import mysql.connector
+from datetime import datetime
+import pytz
+
+# -------------------------------------------
+# REPORT GENERATED TIMESTAMP (CST)
+# -------------------------------------------
+cst = pytz.timezone("US/Central")
+generated_timestamp = datetime.now(cst).strftime("%Y-%m-%d %H:%M:%S %Z")
+
+print("\n======================================================")
+print("REPORT 2: Booking Trends by Region")
+print(f"Report Generated: {generated_timestamp}")
+print("======================================================\n")
+
+# -------------------------------------------
+# DATABASE CONNECTION
+# -------------------------------------------
+try:
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="Gillmore21",
+        database="outland"
+    )
+
+    cursor = db.cursor()
+    print("Database connection successful.\n")
+
+except mysql.connector.Error as err:
+    print(f"Error connecting to database: {err}")
+    exit(1)
+
+# ======================================================
+# SECTION 1: BOOKINGS BY REGION
+# ======================================================
+query_region_trends = """
+SELECT 
+    r.region_name,
+    COUNT(b.booking_id) AS total_bookings
+FROM REGION r
+LEFT JOIN TRIP t 
+    ON r.region_id = t.region_id
+LEFT JOIN BOOKING b 
+    ON t.trip_id = b.trip_id
+GROUP BY r.region_name
+ORDER BY total_bookings DESC;
+"""
+
+cursor.execute(query_region_trends)
+rows = cursor.fetchall()
+
+print(f"{'Region':<25}{'Total Bookings':>15}")
+print("-" * 40)
+
+grand_total = 0
+
+for region_name, total_bookings in rows:
+    grand_total += total_bookings
+    print(
+        f"{region_name:<25}"
+        f"{total_bookings:>15}"
+    )
+
+print("\n-------------------------------------------")
+print(f"{'GRAND TOTAL':<25}{grand_total:>15}")
+print("-------------------------------------------\n")
+
+# ======================================================
+# CLEANUP
+# ======================================================
+cursor.close()
+db.close()
+print("Database connection closed.")
